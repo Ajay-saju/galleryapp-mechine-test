@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                         child: LimitedBox(
                           maxHeight: 600,
                           maxWidth: double.infinity,
-                        child: GridView.builder(
+                          child: GridView.builder(
                             itemCount: controller.images.length,
                             itemBuilder: (context, index) {
                               return Container(
@@ -51,7 +51,8 @@ class HomeScreen extends StatelessWidget {
                                 width: 200,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: FileImage(controller.images[index]),
+                                      image:
+                                          FileImage(controller.images[index]),
                                       fit: BoxFit.fill,
                                     ),
                                     borderRadius: BorderRadius.circular(10)),
@@ -68,18 +69,44 @@ class HomeScreen extends StatelessWidget {
                     )
             ]);
       }),
-      floatingActionButton: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.purple,
-          // shadowColor: const Color.fromARGB(255, 38, 3, 3)
-        ),
-        onPressed: () {
-          pickImageController.pickMultipleImages();
-        },
-        child: const Text(
-          'Go to Gallery',
-          style: TextStyle(fontSize: 16),
-        ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              // shadowColor: const Color.fromARGB(255, 38, 3, 3)
+            ),
+            onPressed: () {
+              pickImageController.clearImages();
+            },
+            child: const Text(
+              'Clear',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              // shadowColor: const Color.fromARGB(255, 38, 3, 3)
+            ),
+            onPressed: () {
+              if (pickImageController.images.length < 5) {
+                pickImageController.pickMultipleImages();
+              } else {
+                Get.snackbar('Error', 'select maximum 5 images',
+                    colorText: Colors.white,
+                    padding: const EdgeInsets.all(10),
+                    backgroundColor: const Color.fromARGB(255, 116, 61, 57),
+                    snackPosition: SnackPosition.BOTTOM);
+              }
+            },
+            child: const Text(
+              'Go to Gallery',
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ],
       ),
     );
   }

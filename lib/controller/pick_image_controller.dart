@@ -28,12 +28,19 @@ class PickImageController extends GetxController {
   Future pickMultipleImages() async {
     final List<XFile>? selectedImges = await ImagePicker().pickMultiImage();
 
-    if (selectedImges != null && selectedImges.length <= 5 ) {
+    if (selectedImges != null && selectedImges.length <= 5) {
       for (int i = 0; i < selectedImges.length; i++) {
         final bytes =
             File(selectedImges[i].path).readAsBytesSync().lengthInBytes;
-
-        if (bytes / 1024 < 1120 && images.length < 5) {
+        if (images.length >= 5) {
+          Get.snackbar('Error', 'select maximum 5 images',
+              colorText: Colors.white,
+              padding: const EdgeInsets.all(10),
+              backgroundColor: const Color.fromARGB(255, 116, 61, 57),
+              snackPosition: SnackPosition.BOTTOM);
+          return;
+        }
+        if (bytes / 1024 < 5120) {
           images.add(File(selectedImges[i].path));
         } else {
           Get.snackbar('Image is too heavy',
@@ -44,14 +51,19 @@ class PickImageController extends GetxController {
               snackPosition: SnackPosition.BOTTOM);
         }
       }
-    } else if (selectedImges != null) {
-      Get.snackbar('Error', 'select lessthan 5 images',
+    } else {
+      Get.snackbar('Error', 'select maximum 5 images',
           colorText: Colors.white,
           padding: const EdgeInsets.all(10),
           backgroundColor: const Color.fromARGB(255, 116, 61, 57),
           snackPosition: SnackPosition.BOTTOM);
     }
 
+    update();
+  }
+
+  clearImages() {
+    images.clear();
     update();
   }
 }
